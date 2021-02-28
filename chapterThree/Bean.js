@@ -1,4 +1,3 @@
-
 const countChar = function (strng, chr) {
   const x = String(strng)
   let count = 0
