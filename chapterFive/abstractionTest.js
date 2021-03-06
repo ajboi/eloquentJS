@@ -25,13 +25,3 @@ repeat(10, (i) => array.push(i))
 console.log(array)
 
 /* if we were to write a lower level function for this, it would look like: */
-// let obj = {
-//     hi: 1,
-//     fun: (n) => n + obj.hi
-// }
-
-// function dor (f) {
-//     console.log(f(2))
-// }
-
-// dor(obj.fun)
