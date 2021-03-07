@@ -8,7 +8,7 @@ function getKeyByValue (object, value) {
 }
 console.log(typeof (getKeyByValue(y, 2)))
 // TLDR: A symbol can be accessed with [] only. A key that is a symbol can't be accessed by Object.keys().
-// It is only accessible using Reflector.ownKeys() and Object.getOwnPropertySymbols().
+// Symbol keys are only accessible using Reflector.ownKeys() and Object.getOwnPropertySymbols().
 
 const a = Symbol('a') // The string parameter doesn't alter the value of symbol by any means. It is just a description.
 const b = Symbol('a')
