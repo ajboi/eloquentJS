@@ -1,19 +1,19 @@
-function buildGraph (edges) {
-  const graph = Object.create(null)
+function buildGraph (array) {
+  const graph = {}
+  const stripped = array.map(a => a.split('-'))
+  //   console.log(stripped)
 
-  function addEdge (from, to) {
-    if (graph[from] == null) {
+  function yes (from, to) {
+    if (!(from in graph)) {
       graph[from] = [to]
     } else {
       graph[from].push(to)
     }
   }
 
-  const array = edges.map(r => r.split('-'))
-  console.log(array)
-  for (const [from, to] of array) {
-    addEdge(from, to)
-    addEdge(to, from)
+  for (const [from, to] of stripped) {
+    yes(from, to)
+    yes(to, from)
   }
   return graph
 }
@@ -29,7 +29,7 @@ const roads = [
 ]
 
 const roadGraph = buildGraph(roads)
-console.log(roadGraph)
+// console.log(roadGraph)
 
 class VillageState {
   constructor (place, parcels) {
@@ -40,24 +40,18 @@ class VillageState {
   move (destination) {
     if (!(roadGraph[this.place].includes(destination))) return this
     else {
-      const parcels = this.parcels.map(p => {
-        if (p.place !== this.place) return p
-        else return { place: destination, address: p.address }
-      }).filter(m => m.place !== m.address)
+      const parcels = this.parcels.map(a => {
+        if (this.place !== a.place) return a
+        else return { place: destination, address: a.address }
+      }).filter(p => p.place !== p.address)
       return new VillageState(destination, parcels)
     }
   }
 }
 
-const first = new VillageState(
-  'Post Office',
-  [{ place: 'Post Office', address: "Alice's House" }]
-)
-const next = first.move("Alice's House")
+const initial = new VillageState('Post Office', [{ place: 'Post Office', address: "Alice's House" }, { place: "Alice's House", address: 'Marketplace' }])
 
+const next = initial.move("Alice's House")
 console.log(next.place)
-// ! Alice's House
 console.log(next.parcels)
-// ! []
-console.log(first.place)
-// ! Post Office
+console.log(initial.place)
