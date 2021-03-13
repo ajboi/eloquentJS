@@ -1,4 +1,4 @@
-You can mention use script for the entire script or for certain functions.
+// You can mention use script for the entire script or for certain functions.
 
 function strictLoge () {
   'use strict'
