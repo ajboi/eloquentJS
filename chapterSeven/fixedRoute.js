@@ -38,7 +38,7 @@ const roadGraph = buildGraph(roads)
 
 class VillageState {
   constructor (place, parcels) {
-    this.place = place,
+    this.place = place
     this.parcels = parcels
   }
 
@@ -53,36 +53,54 @@ class VillageState {
     }
   }
 }
+// const first = new VillageState(
+//   'Post Office',
+//   [{ place: 'Post Office', address: "Alice's House" }, { place: 'Town Hall', address: 'Marketplace' }]
+// )
 
-function runRobot (currentState, robotFunction) {
+// const next = first.move("Alice's House")
+// console.log(next)
+const mailRoute = [
+  "Alice's House", 'Cabin', "Alice's House", "Bob's House",
+  'Town Hall', "Daria's House", "Ernie's House",
+  "Grete's House", 'Shop', "Grete's House", 'Farm',
+  'Marketplace', 'Post Office'
+]
+
+function runRobot (currentVillageState, robotActionFunction, memory) {
   for (let turn = 0; ; turn++) {
-    if (currentState.parcels.length === 0) {
-      console.log(`Done in ${turn} steps.`)
+    if (currentVillageState.parcels.length === 0) {
+      console.log(`Finished in ${turn} steps.`)
       break
     }
-    const robotActionn = robotFunction(currentState)
-    currentState = currentState.move(robotActionn.destination)
-    console.log(`Moved to ${robotActionn.destination}`)
+    const nextStop = robotActionFunction(currentVillageState, memory)
+    currentVillageState = currentVillageState.move(nextStop.direction)
+    memory = nextStop.memory
+    console.log(`Moved to ${nextStop.direction}`)
   }
 }
 
-function randomPick (array) {
+function routeRobot (state, memory) {
+  if (memory.length === 0) {
+    memory = mailRoute
+  }
+  return { direction: memory[0], memory: memory.slice(1) }
+}
+function pickRandom (array) {
   return array[Math.floor(Math.random() * array.length)]
 }
 
-function randomRobotFunction (state) {
-  return { destination: randomPick(roadGraph[state.place]) }
-}
-
-VillageState.randomState = function (parcelsCount = 5) {
+VillageState.random = function (parcelCount = 5) {
   const parcels = []
-  const address = randomPick(Object.keys(roadGraph))
-  let place
-  do {
-    place = randomPick(Object.keys(roadGraph))
-  } while (address === place)
-  parcels.push({ place, address })
+  for (let i = 0; i < parcelCount; i++) {
+    const address = randomPick(Object.keys(roadGraph))
+    let place
+    do {
+      place = randomPick(Object.keys(roadGraph))
+    } while (place == address)
+    parcels.push({ place, address })
+  }
   return new VillageState('Post Office', parcels)
 }
 
-runRobot(VillageState.randomState(), randomRobotFunction)
+runRobot(VillageState.randomState(), routeRobot, [])

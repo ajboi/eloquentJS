@@ -38,7 +38,7 @@ const roadGraph = buildGraph(roads)
 
 class VillageState {
   constructor (place, parcels) {
-    this.place = place,
+    this.place = place
     this.parcels = parcels
   }
 
@@ -69,6 +69,7 @@ function runRobot (currentVillageState, robotActionFunction) {
     }
     const randomRobotAction = robotActionFunction(currentVillageState)
     currentVillageState = currentVillageState.move(randomRobotAction.direction)
+    // memory = randomRobotAction.memory
     console.log(`Moved to ${randomRobotAction.direction}`)
   }
 }
@@ -81,17 +82,17 @@ function robotAction (VillageState) {
   return { direction: pickRandom(roadGraph[VillageState.place]) }
 }
 
-const newState = new VillageState('Post Office', [{ place: 'Post Office', address: "Alice's House" }, { place: 'Town Hall', address: 'Marketplace' }])
-
-VillageState.randomState = function (parcelsCount = 5) {
+VillageState.random = function (parcelCount = 5) {
   const parcels = []
-  const address = pickRandom(Object.keys(roadGraph))
-  let place
-  do {
-    place = pickRandom(Object.keys(roadGraph))
-  } while (address === place)
-  parcels.push({ place, address })
+  for (let i = 0; i < parcelCount; i++) {
+    const address = pickRandom(Object.keys(roadGraph))
+    let place
+    do {
+      place = pickRandom(Object.keys(roadGraph))
+    } while (place === address)
+    parcels.push({ place, address })
+  }
   return new VillageState('Post Office', parcels)
 }
 
-runRobot(VillageState.randomState(), robotAction)
+runRobot(VillageState.random(), robotAction)
