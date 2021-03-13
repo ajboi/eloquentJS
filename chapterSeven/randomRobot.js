@@ -62,35 +62,38 @@ class VillageState {
 // console.log(next)
 
 function runRobot (currentVillageState, robotActionFunction) {
+  // A function that accepts a current VillageState and another function that contains the operating instructions for the random robot.
   for (let turn = 0; ; turn++) {
     if (currentVillageState.parcels.length === 0) {
       console.log(`Finished in ${turn} steps.`)
       break
+      // Keep looping till there are parcels to be delivered. Break only when parcels become 0.
     }
-    const randomRobotAction = robotActionFunction(currentVillageState)
-    currentVillageState = currentVillageState.move(randomRobotAction.direction)
+    const randomRobotAction = robotActionFunction(currentVillageState) // calls the random robot. The random robot function tells where to go next.
+    currentVillageState = currentVillageState.move(randomRobotAction.direction) // moves the robot to the direction specified by robotActionFunction.
     // memory = randomRobotAction.memory
     console.log(`Moved to ${randomRobotAction.direction}`)
   }
 }
 
 function pickRandom (array) {
-  return array[Math.floor(Math.random() * array.length)]
+  return array[Math.floor(Math.random() * array.length)] // returns a random element within the array
 }
 
 function robotAction (VillageState) {
-  return { direction: pickRandom(roadGraph[VillageState.place]) }
+  return { direction: pickRandom(roadGraph[VillageState.place]) } // returns a place that is accessible from the current place of the state.
 }
 
 VillageState.random = function (parcelCount = 5) {
+  // A static function of VillageState class that creates an instance of VillageState with 5 random parcels to be delivered, with current location as Post Office.
   const parcels = []
   for (let i = 0; i < parcelCount; i++) {
-    const address = pickRandom(Object.keys(roadGraph))
+    const address = pickRandom(Object.keys(roadGraph)) // pick a random delivery address.
     let place
     do {
-      place = pickRandom(Object.keys(roadGraph))
-    } while (place === address)
-    parcels.push({ place, address })
+      place = pickRandom(Object.keys(roadGraph)) // pick a random pickup place.
+    } while (place === address) // will keep on executing until the address and place are not equal.(mostly not equal the first time.)
+    parcels.push({ place, address }) // push the place, address pair to the parcels object.
   }
   return new VillageState('Post Office', parcels)
 }
