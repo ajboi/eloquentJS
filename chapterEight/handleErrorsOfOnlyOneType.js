@@ -27,7 +27,7 @@ function promptDirection (question) {
     const dir = prompt(question)
     if (dir.toLowerCase() === 'left') return "L"
     if (dir.toLowerCase() === 'right') return "R"
-    throw new Error('Unknown input.')
+    throw new InputError('Unknown input.') // Throws error of the type InputError, to identify these errors from other common errors.
   }
 
   for (;;) {
