@@ -83,8 +83,15 @@ function robotAction (VillageState) {
 
 const newState = new VillageState('Post Office', [{ place: 'Post Office', address: "Alice's House" }, { place: 'Town Hall', address: 'Marketplace' }])
 
-VillageState.xyz = function (parcelsCount = 5) {
+VillageState.randomState = function (parcelsCount = 5) {
   const parcels = []
+  const address = pickRandom(Object.keys(roadGraph))
+  let place
+  do {
+    place = pickRandom(Object.keys(roadGraph))
+  } while (address === place)
+  parcels.push({ place, address })
+  return new VillageState('Post Office', parcels)
 }
 
-runRobot(newState, robotAction)
+runRobot(VillageState.randomState(), robotAction)
