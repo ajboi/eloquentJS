@@ -53,10 +53,38 @@ class VillageState {
     }
   }
 }
-const first = new VillageState(
-  'Post Office',
-  [{ place: 'Post Office', address: "Alice's House" }, { place: 'Town Hall', address: 'Marketplace' }]
-)
+// const first = new VillageState(
+//   'Post Office',
+//   [{ place: 'Post Office', address: "Alice's House" }, { place: 'Town Hall', address: 'Marketplace' }]
+// )
 
-const next = first.move("Alice's House")
-console.log(next)
+// const next = first.move("Alice's House")
+// console.log(next)
+
+function runRobot (currentVillageState, robotActionFunction) {
+  for (let turn = 0; ; turn++) {
+    if (currentVillageState.parcels.length === 0) {
+      console.log(`Finished in ${turn} steps.`)
+      break
+    }
+    const randomRobotAction = robotActionFunction(currentVillageState)
+    currentVillageState = currentVillageState.move(randomRobotAction.direction)
+    console.log(`Moved to ${randomRobotAction.direction}`)
+  }
+}
+
+function pickRandom (array) {
+  return array[Math.floor(Math.random() * array.length)]
+}
+
+function robotAction (VillageState) {
+  return { direction: pickRandom(roadGraph[VillageState.place]) }
+}
+
+const newState = new VillageState('Post Office', [{ place: 'Post Office', address: "Alice's House" }, { place: 'Town Hall', address: 'Marketplace' }])
+
+VillageState.xyz = function (parcelsCount = 5) {
+  const parcels = []
+}
+
+runRobot(newState, robotAction)
